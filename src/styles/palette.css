@@ -1,0 +1,11 @@
+html {
+    --color-element-background: #18212b;
+    --color-element-background-dark: #18212b65;
+    --color-shadow: #0f151b;
+    --color-accent: #7db0c5;
+    --color-primary: #e2351e;
+    --color-secondary: #b1bec9;
+
+    --color-error: #e2351e;
+    --color-success: #95e03f;
+}

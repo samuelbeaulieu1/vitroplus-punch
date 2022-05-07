@@ -1,0 +1,18 @@
+.container {
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    grid-template-areas: ". keypad .";
+}
+
+@media screen and (max-width: 1200px) and (min-width: 600px) {
+    .container {
+        grid-template-columns: 20% 60% 20%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        grid-template-columns: 10% 80% 10%;
+    }
+}

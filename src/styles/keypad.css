@@ -1,0 +1,47 @@
+.digits-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.digits {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.digits-container>.icon {
+    position: absolute;
+    right: -3rem;
+    min-width: 0px;
+    padding: 0.5rem;
+    font-size: 16px;
+    border-radius: 50%;
+}
+
+.digit {
+    max-width: 4rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    min-height: 64px;
+    font-size: 18px;
+    color: var(--color-secondary);
+    background: none;
+    text-align: center;
+}
+
+.digit:focus {
+    outline: none;
+    border: 3px solid var(--color-primary);
+}
+
+@media screen and (max-width: 500px) {
+    .digits-container>.icon {
+        margin-top: 1rem;
+        position: inherit;
+        right: 0px;
+    }
+
+    .digits-container {
+        flex-direction: column;
+    }
+}

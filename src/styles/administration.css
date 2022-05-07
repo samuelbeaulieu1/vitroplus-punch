@@ -1,0 +1,34 @@
+.admin-container {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-auto-flow: row dense;
+    grid-gap: 1rem;
+}
+
+@media screen and (max-width: 800px) {
+    .admin-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: 100vw;
+        justify-content: center;
+    }
+
+    .grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-auto-flow: row dense;
+        grid-gap: 1rem;
+    }
+}
