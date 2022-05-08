@@ -120,6 +120,12 @@ const AuthenticationContainer: React.FC = (props) => {
             },
         }
     }, [session, newConn, setSession]);
+    const inputRef = useRef<any>(null);
+    useEffect(() => {
+        if (showModal && inputRef.current !== null) {
+            inputRef.current.focus();
+        }
+    }, [showModal, inputRef]);
 
     return (
     <AuthenticationContext.Provider value={context}>
@@ -135,6 +141,7 @@ const AuthenticationContainer: React.FC = (props) => {
                         variant="standard"
                         type="password"
                         value={password}
+                        inputRef={inputRef}
                         disabled={isDisabled}
                         error={hasError("password")}
                         onChange={(e) => setPassword(e.target.value)}></TextField>

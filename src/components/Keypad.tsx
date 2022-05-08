@@ -6,6 +6,10 @@ import Digit from "common/Digit"
 import 'styles/keypad.css';
 import { PinContext, PinContextInterface } from "./Home";
 
+export interface KeypadProps {
+    onSend: () => void;
+}
+
 const onChange = (value: string, index: number, setPin: any) => {
     setPin((pin: string[]) => {
         const newPin = [...pin];
@@ -29,7 +33,7 @@ const getFocusIndex = (pin: string[]) => {
     return index === -1 ? 3:index;
 }
 
-const Keypad: React.FC = () => {
+const Keypad = (props: KeypadProps) => {
     const [showPin, setShowPin] = useState(false);
     const {pin, setPin} = useContext(PinContext) as PinContextInterface;
     const digitsRef = useMemo<React.RefObject<HTMLInputElement>[]>(() => pin.map(() => React.createRef<HTMLInputElement>()), [pin]);
@@ -42,10 +46,16 @@ const Keypad: React.FC = () => {
     useEffect(() => {
         const index = getFocusIndex(pin);
         const ref = digitsRef[index];
-        if (ref != null) {
-            ref.current?.focus();
+        if (ref.current !== null) {
+            ref.current.focus();
+
+            ref.current.onkeydown = (e) => {
+                if (e.key === "Enter") {
+                    props.onSend();
+                }
+            }
         }
-    }, [pin, digitsRef]);
+    }, [pin, digitsRef, props]);
 
     return (
         <div className="digits-container">

@@ -73,19 +73,7 @@ function usePin(): [string[], any, () => void] {
         }).catch((e: ApiError) => {
             handleError(e, notificationHandler);
         });
-    }, [pin, notificationHandler])
-
-    useEffect(() => {
-        const keypressHandler = (e: KeyboardEvent) => {
-            if (e.key === "Enter") {
-                clockIn();
-            }
-        }
-
-        document.body.addEventListener("keydown", keypressHandler);
-
-        return () => document.body.removeEventListener("keydown", keypressHandler);
-    }, [clockIn]);
+    }, [pin, notificationHandler]);
     
     return [pin, setPin, clockIn];
 }
@@ -130,7 +118,7 @@ const Home: React.FC = () => {
                         <Typography gutterBottom variant="h5" component="div">
                             PIN employé
                         </Typography>
-                        <Keypad/>
+                        <Keypad onSend={() => clockIn()}/>
                         <Button 
                             disabled={pin.join("").length !== 4}
                             onClick={() => clockIn()}
