@@ -6,6 +6,7 @@ import BranchPage from './Admin/Branch/Branch'
 import Branches from './Admin/Branch/Branches'
 import EmployeePage from './Admin/Employee/Employee'
 import Employees from './Admin/Employee/Employees'
+import BranchWorkReport from './Admin/Report/BranchWorkReport'
 import EmployeeWorkReport from './Admin/Report/EmployeeWorkReport'
 import WorkReports from './Admin/Report/WorkReports'
 import Works from './Admin/Work/Works'
@@ -28,6 +29,7 @@ const RoutesContainer: React.FC = (props) => {
             <Route path='administration/works' element={<Works/>}></Route>
             <Route path='administration/workReports' element={<WorkReports/>}></Route>
             <Route path='administration/workReport/between/:start/:end/for/:id' element={<EmployeeWorkReport/>}></Route>
+            <Route path='administration/workReport/between/:start/:end/in/:id' element={<BranchWorkReport/>}></Route>
             <Route path='administration/branches' element={<Administration/>}></Route>
         </Routes>
     </Router>

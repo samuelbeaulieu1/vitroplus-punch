@@ -1,4 +1,5 @@
 import { AuthenticationCtx } from 'components/Authentication';
+import { BranchReport } from 'data/branch_report';
 import { Clock } from 'data/clock';
 import { ClocksDayReport } from 'data/clocks_day_report';
 import { ClockIn } from 'data/clock_in';
@@ -36,11 +37,22 @@ export const clockInOut = (pin: string): Promise<ClockIn> => {
     }, { pin }).then(res => res.data);
 }
 
-export const getBranchReport = (auth: AuthenticationCtx, branchId: string, start: moment.Moment, end: moment.Moment): Promise<Blob> => {
+export const getBranchReport = (auth: AuthenticationCtx, branchId: string, start: moment.Moment, end: moment.Moment): Promise<BranchReport> => {
+    return get<BranchReport>({
+        url: `${api}/${endpoint}/Between/${start.format("YYYY-MM-DD")}/${end.format("YYYY-MM-DD")}/In/${branchId}`,
+        authentication: auth,
+    }).then(res => res.data);
+}
+
+export const downloadBranchReportPdf = (auth: AuthenticationCtx, report: BranchReport): Promise<Blob> => {
     const opts = {
         headers: getHeaders(auth.session?.token),
+        method: "POST",
+        body: JSON.stringify(report),
     }
-    const url = `${api}/${endpoint}/Between/${start.format("YYYY-MM-DD")}/${end.format("YYYY-MM-DD")}/In/${branchId}`
+    const start = moment(report.start_date).format("YYYY-MM-DD");
+    const end = moment(report.end_date).format("YYYY-MM-DD");
+    const url = `${api}/${endpoint}/Between/${start}/${end}/In/${report.branch.id}/ToPDF`
 
     return fetch(url, opts).then((res) => handleBlobResponse(res)).catch((e) => {
         throw onError(e);
