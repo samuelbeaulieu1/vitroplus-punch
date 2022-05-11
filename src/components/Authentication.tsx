@@ -14,6 +14,7 @@ export interface AuthenticationCtx {
     session: Session|null;
     connect: (onConnect?: () => void) => void;
     disconnect: () => void;
+    open: boolean;
 }
 
 export interface AuthenticationEdit {
@@ -27,9 +28,11 @@ export interface AuthenticationEdit {
     hasError: (k: string) => boolean;
     connect: () => void;
     newConn: (onConnect?: () => void) => void;
+    open: boolean;
+    refresh: number;
 }
 
-export const AuthenticationContext = createContext<AuthenticationCtx>({session: null, connect: () => {}, disconnect: () => {}});
+export const AuthenticationContext = createContext<AuthenticationCtx>({session: null, connect: () => {}, disconnect: () => {}, open: false});
 
 function useAdmin(): AuthenticationEdit {
     const notificationHandler = useContext(NotificationContext);
@@ -38,6 +41,8 @@ function useAdmin(): AuthenticationEdit {
     const [password, setPassword] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState(false);
     const [errorFields, setErrorFields] = useState<string[]>([]);
+    const [open, setOpen] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<number>(0);
     const onConnect = useRef<(() => void)|undefined>(undefined);
 
     const connect = useCallback(() => {
@@ -54,6 +59,7 @@ function useAdmin(): AuthenticationEdit {
         }).catch((e: ApiError) => {
             setErrorFields(handleError(e, notificationHandler));
             setIsDisabled(false);
+            setRefresh(n => n + 1);
         });
     }, [password, notificationHandler]);
 
@@ -78,6 +84,8 @@ function useAdmin(): AuthenticationEdit {
         if (showModal) {
             document.body.addEventListener("keydown", keypressHandler);
         }
+        setOpen(showModal);
+        setRefresh(n => n + 1);
 
         return () => document.body.removeEventListener("keydown", keypressHandler);
     }, [connect, showModal]);
@@ -93,6 +101,8 @@ function useAdmin(): AuthenticationEdit {
         hasError,
         connect,
         newConn,
+        open,
+        refresh,
     };
 }
 
@@ -108,6 +118,8 @@ const AuthenticationContainer: React.FC = (props) => {
         hasError,
         connect,
         newConn,
+        open,
+        refresh,
     } = useAdmin();
     const context = useMemo<AuthenticationCtx>(() => {
         return {
@@ -118,14 +130,15 @@ const AuthenticationContainer: React.FC = (props) => {
             disconnect: () => {
                 setSession(null);
             },
+            open,
         }
-    }, [session, newConn, setSession]);
+    }, [open, session, newConn, setSession]);
     const inputRef = useRef<any>(null);
     useEffect(() => {
         if (showModal && inputRef.current !== null) {
             inputRef.current.focus();
         }
-    }, [showModal, inputRef]);
+    }, [refresh, showModal, inputRef]);
 
     return (
     <AuthenticationContext.Provider value={context}>

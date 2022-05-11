@@ -55,11 +55,12 @@ export interface PinContextInterface {
 export const PinContext = createContext<PinContextInterface | null>(null);
 
 function usePin(): [string[], any, () => void] {
+    const authCtx = useContext(AuthenticationContext);
     const notificationHandler = useContext(NotificationContext);
     const [pin, setPin] = useState(["", "", "", ""]);
 
     const clockIn = useCallback(() => {
-        if (pin.join("").length !== 4) {
+        if (pin.join("").length !== 4 || authCtx.open) {
             return;
         }
 
