@@ -12,6 +12,8 @@ import { WorksEditContext } from 'data/work_edit_context'
 import { useEditClocks } from 'hooks/clocks_edit_hook'
 import { useContext } from 'react'
 import { NotificationContext } from 'components/Notification'
+import { TimePicker } from '@mui/lab'
+import moment from 'moment'
 
 const WorksEditStyle = {
     tableRow: {
@@ -78,12 +80,15 @@ const WorksEdit = (props: WorksEditProps) => {
                                 <Row key={i} style={{...TableBodyStyle.tableRow, ...TableBodyStyle.bodyRow, ...WorksEditStyle.tableRow}}>
                                     <Column></Column>
                                     <Column>
-                                        <TextField 
-                                            type="time"
-                                            value={c.date.format("HH:mm")}
-                                            onChange={(e) => editHook.editClockEntry(e.target.value, i)}
+                                        <TimePicker
+                                        ampm={false}
+                                        value={c.date}
+                                        onChange={(e: moment.Moment | null) => editHook.editClockEntry(e?.format("HH:mm"), i)}
+                                        renderInput={(params) => <TextField
                                             onBlur={() => editHook.sortClocks()}
-                                            variant="standard"/>
+                                            variant="standard"
+                                            {...params} />}
+                                        ></TimePicker>
                                     </Column>
                                     <Column>
                                         { i % 2 === 0 ? (
